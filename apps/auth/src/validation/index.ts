@@ -10,8 +10,12 @@ export const validationSchema = Joi.object({
   JWT_EXPIRATION: Joi.string().required().messages({
     'string.empty': 'JWT_EXPIRATION is required',
   }),
-  PORT: Joi.number().required().messages({
+  HTTP_PORT: Joi.number().required().messages({
     'number.base': 'PORT must be a number',
     'number.empty': 'PORT is required',
+  }),
+  TCP_PORT: Joi.number().required().messages({
+    'number.base': 'TCP_PORT must be a number',
+    'number.empty': 'TCP_PORT is required',
   }),
 });

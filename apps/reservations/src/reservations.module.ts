@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
-import { DatabaseModule, LoggerModule } from '@app/common';
+import { DatabaseModule, LoggerModule, AUTH_SERVICE } from '@app/common';
 import { ReservationsRespository } from './reservations.repository';
 import {
   ReservationDocument,
@@ -9,6 +9,7 @@ import {
 } from './models/reservation.schema';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from 'apps/reservations/src/validation';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -21,6 +22,12 @@ import { validationSchema } from 'apps/reservations/src/validation';
       { name: ReservationDocument.name, schema: ReservationSchema },
     ]),
     LoggerModule,
+    ClientsModule.register([
+      {
+        name: AUTH_SERVICE,
+        transport: Transport.TCP,
+      },
+    ]),
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRespository],

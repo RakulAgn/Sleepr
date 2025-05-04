@@ -4,6 +4,8 @@ import { LocalAuthGuard } from './guards/local.auth.guard';
 import { CurrentUser } from './decorator/current-user.decorator';
 import { UsersDocument } from './users/models/user.schema';
 import { Response } from 'express';
+import { JwtAuthGuard } from './guards/jwt.auth.guard';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('auth')
 export class AuthController {
@@ -17,5 +19,15 @@ export class AuthController {
   ) {
     await this.authService.login(user, response);
     response.send(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @MessagePattern('authenicate')
+  async authenticate(
+    @CurrentUser() user: UsersDocument,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.authService.login(user, response);
+    return user;
   }
 }
