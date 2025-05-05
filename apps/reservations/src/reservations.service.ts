@@ -9,26 +9,31 @@ export class ReservationsService {
     private readonly reservationRepository: ReservationsRespository,
   ) {}
 
-  create(createReservationDto: CreateReservationDto) {
+  create(createReservationDto: CreateReservationDto, userId: string) {
     return this.reservationRepository.create({
       ...createReservationDto,
       timestamp: new Date(),
-      userId: '123',
+      userId,
     });
   }
 
-  findAll() {
-    return this.reservationRepository.find({});
+  findAll(userId: string) {
+    return this.reservationRepository.find({ userId: userId });
   }
 
-  findOne(_id: string) {
-    return this.reservationRepository.findOne({ _id });
+  findOne(_id: string, userId: string) {
+    return this.reservationRepository.findOne({ _id, userId });
   }
 
-  update(_id: string, updateReservationDto: UpdateReservationDto) {
+  update(
+    _id: string,
+    updateReservationDto: UpdateReservationDto,
+    userId: string,
+  ) {
     return this.reservationRepository.findOneAndUpdate(
       {
         _id,
+        userId,
       },
       {
         $set: updateReservationDto,
@@ -36,7 +41,7 @@ export class ReservationsService {
     );
   }
 
-  remove(_id: string) {
-    return this.reservationRepository.findOneAndDelete({ _id });
+  remove(_id: string, userId: string) {
+    return this.reservationRepository.findOneAndDelete({ _id, userId });
   }
 }

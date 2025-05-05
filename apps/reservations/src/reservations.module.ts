@@ -7,7 +7,7 @@ import {
   ReservationDocument,
   ReservationSchema,
 } from './models/reservation.schema';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validationSchema } from 'apps/reservations/src/validation';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
@@ -22,10 +22,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       { name: ReservationDocument.name, schema: ReservationSchema },
     ]),
     LoggerModule,
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: AUTH_SERVICE,
-        transport: Transport.TCP,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
+          },
+        }),
+        inject: [ConfigService],
       },
     ]),
   ],
