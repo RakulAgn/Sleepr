@@ -6,6 +6,7 @@ import {
   LoggerModule,
   AUTH_SERVICE,
   PAYMENTS_SERVICE,
+  ReservationValidationSchema,
 } from '@app/common';
 import { ReservationsRespository } from './reservations.repository';
 import {
@@ -13,14 +14,13 @@ import {
   ReservationSchema,
 } from './models/reservation.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { validationSchema } from 'apps/reservations/src/validation';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema,
+      validationSchema: ReservationValidationSchema,
     }),
     LoggerModule,
     DatabaseModule,
