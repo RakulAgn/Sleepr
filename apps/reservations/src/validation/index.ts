@@ -8,4 +8,18 @@ export const validationSchema = Joi.object({
     'number.base': 'PORT must be a number',
     'number.empty': 'PORT is required',
   }),
+  AUTH_HOST: Joi.string().required().messages({
+    'string.empty': 'AUTH_HOST is required',
+  }),
+  PAYMENTS_HOST: Joi.string().required().messages({
+    'string.empty': 'PAYMENTS_HOST is required',
+  }),
+  AUTH_PORT: Joi.number().required().messages({
+    'number.base': 'AUTH_PORT must be a number',
+    'number.empty': 'AUTH_PORT is required',
+  }),
+  PAYMENTS_PORT: Joi.number().required().messages({
+    'number.base': 'PAYMENTS_PORT must be a number',
+    'number.empty': 'PAYMENTS_PORT is required',
+  }),
 });
