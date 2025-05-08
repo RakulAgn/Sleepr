@@ -1,8 +1,20 @@
 import * as Joi from 'joi';
 
 export const PaymentValidationSchema = Joi.object({
-  PORT: Joi.number().required(),
-  STRIPE_SECRET_KEY: Joi.string().required(),
+  PORT: Joi.number().required().messages({
+    'number.base': 'PORT must be a number',
+    'number.empty': 'PORT is required',
+  }),
+  NOTIFICATION_PORT: Joi.number().required().messages({
+    'number.base': 'NOTIFICATION_PORT must be a number',
+    'number.empty': 'NOTIFICATION_PORT is required',
+  }),
+  NOTIFICATION_HOST: Joi.string().required().messages({
+    'string.empty': 'NOTIFICATION_HOST is required',
+  }),
+  STRIPE_SECRET_KEY: Joi.string().required().messages({
+    'string.empty': 'STRIPE_SECRET_KEY is required',
+  }),
 });
 
 export const AuthValidationSchema = Joi.object({
@@ -50,5 +62,8 @@ export const ReservationValidationSchema = Joi.object({
 });
 
 export const NotificationValidationSchema = Joi.object({
-  PORT: Joi.number().required(),
+  PORT: Joi.number().required().messages({
+    'number.base': 'PORT must be a number',
+    'number.empty': 'PORT is required',
+  }),
 });

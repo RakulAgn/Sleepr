@@ -1,8 +1,13 @@
+import {
+  LoggerModule,
+  NOTIFICATIONS_SERVICE,
+  PaymentValidationSchema,
+} from '@app/common';
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
-import { ConfigModule } from '@nestjs/config';
-import { LoggerModule, PaymentValidationSchema } from '@app/common';
 
 @Module({
   imports: [
@@ -11,6 +16,19 @@ import { LoggerModule, PaymentValidationSchema } from '@app/common';
       validationSchema: PaymentValidationSchema,
     }),
     LoggerModule,
+    ClientsModule.registerAsync([
+      {
+        name: NOTIFICATIONS_SERVICE,
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('NOTIFICATION_HOST'),
+            port: configService.get('NOTIFICATION_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [PaymentsController],
   providers: [PaymentsService],
